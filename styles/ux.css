@@ -1,0 +1,96 @@
+body{
+    background: #343a40;
+    overflow: hidden;
+}
+
+.card-header { background: #414850; color: #ffffff;}
+.list-group li:nth-child(odd) { background: #d7d7d7; }
+.list-group li:nth-child(even) { background: #c7c7c7; }
+
+#menu{
+    border-bottom: 0.3vh solid orange;
+}
+
+#naglowki > li
+{
+    margin-right: 0.3em;
+}
+
+hr { background-color: white; height: 1px; border: 0; }
+
+ul hr{ 
+    height: 1px;
+    color: #343a40;
+    background-color: #343a40;
+    border: none;
+  }
+
+.notatnik{
+    background-color: #ffffff;
+}
+
+.ql-toolbar{
+    background-color: #e9ecef;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+.navbar i{
+  padding-right: 0.5rem;
+}
+
+.ux-list-container
+{
+  padding: 0;
+  border-radius: 0;  
+  border-style:"none";
+  border-right:"0.06em solid orange";
+  overflow:"hidden";
+}
+
+.tabulator-col-title{
+  text-align: center;
+}
+
+#collapseHelp{
+  margin-top: 1.25rem;
+}
+
+.tabulator-footer{
+  background: #414850;
+  color: #e9ecef;
+}
+
+.gl_export .card 
+{
+  margin-top: 1.25rem;
+  border-radius: 0;
+}
+
+.gl_export .card .card-header
+{
+  border-radius: 0;
+  border-bottom: 0.25vh solid orange;
+}
+
+.ql-toolbar.ql-snow 
+{
+  padding: 4px;
+}
+
+.ql-toolbar.ql-snow .ql-formats 
+{
+  margin-right: 6px;
+}
+
+.ql-editor li{
+  background-color:transparent !important;
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+    <link rel="icon" href="favicon.png"> 
+
+    <title>Audyty eksperckie</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" integrity="sha384-xewr6kSkq3dBbEtB6Z/3oFZmknWn7nHqhLVLrYgzEFRbU/DHSxW7K3B44yWUN60D" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/jquery-confirm.css">
+    <link rel="stylesheet" href="styles/tabulator.css">
+    <link rel="stylesheet" href="styles/goldenlayout-base.css">
+    <link rel="stylesheet" href="styles/goldenlayout-light-theme.css">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" integrity="sha384-07UbSXbd8HpaOfxZsiO6Y8H1HTX6v0J96b5qP6PKSpYEuSZSYD4GFFHlLRjvjVrL" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/ux.css">
+  </head>
+  <body onload="initializeLayout()" style="margin: 0">
+    <nav id="menu" class="navbar navbar-expand-sm bg-dark navbar-dark" style="height:6vh;">
+      <span class="navbar-brand" href="#"><i class="far fa-list-alt" style="color: orange"></i> UX</span>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar1">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar1">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Plik</a>
+              <ul class="dropdown-menu">
+                  <li class="dropdown-item">
+                    <a href="#" class="dropdown-item" onclick="addDocument()"><i class="fas fa-file"></i>Nowy</a>
+                  </li>
+                  <li class="dropdown-item dropdown-submenu">
+                      <a href="#" data-toggle="dropdown" class="dropdown-toggle dropdown-item"><i class="fas fa-file-upload"></i>Wczytaj</a>
+                      <ul class="dropdown-menu">
+                          <li class="dropdown-item">
+                            <a href="#" class="dropdown-item" onclick="loadTemplate()"><i class="far fa-file"></i>Szablon</a>
+                          </li>
+                          <li class="dropdown-item">
+                            <a href="#" class="dropdown-item" onclick="loadDocument()"><i class="far fa-file-alt"></i>Dokument</a>
+                          </li>
+                          <li class="dropdown-item">
+                            <a href="#" class="dropdown-item" onclick="loadNotepad()"><i class="far fa-sticky-note"></i>Notatkę</a>
+                        </li>                            
+                      </ul>
+                  </li>
+                  <li class="dropdown-item dropdown-submenu">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle dropdown-item"><i class="fas fa-file-download"></i>Zapisz...</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                          <a href="#" id="btSaveTemplate" class="dropdown-item disabled" onclick="saveTemplate()"><i class="far fa-file"></i>Szablon</a>
+                        </li>
+                        <li class="dropdown-item">
+                          <a href="#" id="btSaveDocument" class="dropdown-item disabled" onclick="saveDocument()"><i class="far fa-file-alt"></i>Dokument</a>
+                        </li>
+                        <li class="dropdown-item">
+                          <a href="#" id="btAddNotepad" class="dropdown-item" onclick="saveNotepad()"><i class="far fa-sticky-note"></i>Notatkę</a>
+                      </li>
+                    </ul>
+                </li>
+                <li><div class="dropdown-divider"></div></li>
+                <li class="dropdown-item">
+                  <a href="#" id="btExport" class="dropdown-item disabled" data-toggle="modal" data-target="#modalExport"><i class="fas fa-file-word"></i>Eksportuj do .docx</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Narzędzia</a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item"><a href="#" class="dropdown-item" onclick="showNotepadPage()"><i class="far fa-sticky-note"></i>Notatnik</a></li>
+                <li class="dropdown-item"><a href="#" class="dropdown-item" onclick="showPreviewPage()"><i class="fas fa-search"></i>Przeglądarka stron</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="#" id="btHelp" class="nav-link" onclick="showHelpPage()">Pomoc</a>
+            </li>    
+          </ul>
+      </div>
+    </nav>
+
+    <div class="modal fade" id="modalExport" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Eksport danych</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="formExport" class='form'>
+                <input type='hidden' id='textAreaHTML' name='codeHTML'>
+                <div class='form-group'>
+                  <label>Wybierz plik do eksportu: </label>
+                  <select class='form-control' id='selectHTML' onchange='generateHTML()' required>
+                    <option disabled selected value></option>
+                  </select>
+                </div>       
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Anuluj</button>
+                  <button id="btModalExport" class='btn btn-primary' type='submit'><i class='fas fa-file-export'></i> Eksportuj</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" id="goldenLayout" style="height:94vh;"></div>
+
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://golden-layout.com/files/latest/js/goldenlayout.min.js" integrity="sha384-ImdyMhh0ZiHo9bmGGDB585ypuXI7MbDMqycwH+JUovXz7ExdiuwPh2MymDNU42A6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js" integrity="sha384-kjb3ERfmTd6UCpsYld+ISpM404X6LT804aaMmj/2Ffz3XK2RXIQdWhSdtIFve+OO" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" integrity="sha384-Nk2l95f1t/58dCc4FTWQZoXfrOoI2DkcpUvgbLk26lL64Yx3DeBbeftGruSisV3a" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js" integrity="sha384-zoaNaEYcENzf+gJvPEMhdkOqtfGep6wwJ4u/W6nmPmm9PGqIaeEp+dKwwY38/gwM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.2.5/js/tabulator.min.js" integrity="sha384-ygqj/cCP8ehe9Mi3lrSM5JTO5+BzY6kntda9/rL+pfKc9pyvE0sZk1WPXWlgMaiz" crossorigin="anonymous"></script>
+    <script src="scripts/layout.js"></script>
+    <script src="scripts/quill.js"></script>
+    <script src="scripts/pages.js"></script>  
+    <script src="scripts/files.js"></script>
+    <script src="scripts/save.js"></script>
+    <script src="scripts/load.js"></script>
+    <script src="scripts/objects.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/export.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js" integrity="sha384-0zm5QqnR2gL4GY5AwreU3xp5AEGWqkdbamrRLeXwWwepp4JqmPRawLJFD8Cm802W" crossorigin="anonymous"></script>
+    <script src="scripts/quill-image-drop.js"></script>
+    <script src="scripts/FileSaver.js-master/dist/FileSaver.js"></script>
+    <script src="scripts/html-docx-js-master/dist/html-docx.js"></script>
+  </body>
+</html>
